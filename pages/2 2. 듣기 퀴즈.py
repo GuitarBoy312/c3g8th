@@ -117,7 +117,7 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
 # Streamlit UI
 
 # 메인 화면 구성
-st.header("✨인공지능 영어듣기 퀴즈 선생님 퀴즐링🕵️‍♂️")
+st.header("✨인공지능 영어듣기 퀴즈 선생님 퀴즐링🕵️‍♀️")
 st.subheader("🦝동물의 생김새와 크기 영어듣기 퀴즈🦩")
 st.divider()
 
