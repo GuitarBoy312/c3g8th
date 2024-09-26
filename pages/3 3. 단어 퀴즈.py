@@ -14,9 +14,15 @@ words = {
     'giraffe': '기린',
     'lion': '사자',
     'small': '작은',
-    'tall': '키 큰',
+    'tall': '키가 큰',
     'tiger': '호랑이',
-    'zebra': '얼룩말'
+    'to': '~로, ~에',
+    'very': '매우',
+    'zebra': '얼룩말',
+    'zoo': '동물원',
+    'milk': '우유',
+    'too': '또한, 너무',
+    'vegetable': '채소'
 }
 
 def generate_question():
