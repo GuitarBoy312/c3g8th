@@ -27,17 +27,20 @@ words = {
 
 def generate_question():
     word, meaning = random.choice(list(words.items()))
-    if random.choice([True, False]):
+    is_english_to_korean = random.choice([True, False])
+    
+    if is_english_to_korean:
         question = f"'{word}'의 한국어 뜻은 무엇인가요?"
         correct_answer = meaning
-        options = random.sample(list(words.values()), 3)  # 오답 3개 선택
-        options.append(correct_answer)
+        other_options = [v for v in words.values() if v != meaning]
+        options = random.sample(other_options, 3)
     else:
         question = f"'{meaning}'의 영어 단어는 무엇인가요?"
         correct_answer = word
-        options = random.sample(list(words.keys()), 3)  # 오답 3개 선택
-        options.append(correct_answer)
+        other_options = [k for k in words.keys() if k != word]
+        options = random.sample(other_options, 3)
 
+    options.append(correct_answer)
     random.shuffle(options)
     return question, options, correct_answer
 
