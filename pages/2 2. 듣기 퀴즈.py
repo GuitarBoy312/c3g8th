@@ -16,7 +16,14 @@ def generate_question():
         ("Look at the zebra.🦓", "It’s cute."),
         ("Look at the giraffe.🦒", "It’s tall.")
     ]
-    
+    answers = [
+        ("It’s small."),
+        ("It’s big."),
+        ("It’s small."),
+        ("It’s big."),
+        ("It’s cute."),
+        ("It’s tall.")
+    ]
     questions = [
         "이 동물의 모습은 어떤가요?"
     ]
@@ -29,7 +36,7 @@ A: {selected_conversation[0]}
 B: {selected_conversation[1]}
 """
     prompt = f"""{key_expression}을 생성해주세요. 
-    그 후 대화 내용에 관한 객관식 질문을 한국어로 만들어주세요.  
+    그 후 {conversations}에 맞게 정답과 오답을 보기로 하는 객관식 질문을 한국어로 만들어주세요.  
     조건: 문제의 정답은 1개입니다.  
     영어 대화는 A와 B가 각각 1번씩 말하고 끝납니다.
     A는 다음과 같이 한문장을 말하세요.
@@ -42,10 +49,10 @@ B: {selected_conversation[1]}
     [한국어 질문]
     조건: {selected_question}을 만들어야 합니다.
     질문: (한국어로 된 질문) 이 때, 선택지는 한국어로 제공됩니다.
-    A. (선택지)
-    B. (선택지)
-    C. (선택지)
-    D. (선택지)
+    A. ({answers}를 한국어로 바꾼 선택지)
+    B. ({answers}를 한국어로 바꾼 선택지)
+    C. ({answers}를 한국어로 바꾼 선택지)
+    D. ({answers}를 한국어로 바꾼 선택지)
     정답: (정답 선택지)
     """
 
