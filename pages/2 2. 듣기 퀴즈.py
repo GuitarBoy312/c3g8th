@@ -125,7 +125,7 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
     정답: {correct_answer}
     학생의 답변: {user_answer}
     
-    이 학생에게  그들의 답변이 왜 틀렸는지, 그리고 정답이 무엇인지 한국어와 영어 표현을 포함하여 설명해주세요. 
+    이 학생에게  그들의 답변이 왜 틀렸는지, 틀린 답변은 영어로 어떻게 표현할 수 있는지, 그리고 정답이 무엇인지 설명해주세요. 
     설명은 친절하고 격려하는 톤으로 작성해주세요. 
     대화의 내용을 참조하여 구체적으로 설명해주세요.
     """
