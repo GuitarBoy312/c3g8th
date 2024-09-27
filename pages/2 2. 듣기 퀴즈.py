@@ -18,8 +18,7 @@ def generate_question():
     ]
     
     questions = [
-        "이 동물의 모습은 어떤가요?",
-        "어떤 동물에 대해 이야기 했나요?"
+        "이 동물의 모습은 어떤가요?"
     ]
     
     selected_conversation = random.choice(conversations)
