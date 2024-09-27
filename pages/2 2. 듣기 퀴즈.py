@@ -15,7 +15,8 @@ characters = {
 
 def generate_question():
     questions = [
-        "Look at the {animal}."
+        "Look at the {animal}.",
+        "What do you see?"
     ]
     
     animals = {
