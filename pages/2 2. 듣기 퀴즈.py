@@ -15,27 +15,26 @@ characters = {
 
 def generate_question():
     questions = [
-        "Look at the {animal}."
+        "Look at the {animal}.",
+        "What do you see?"
     ]
     
-    answers = [
-        "It's small. 🐤",
-        "It's big. 🦁",
-        "It's cute. 🦓",
-        "It's tall. 🦒"
-    ]
+    animals = {
+        "bird 🐤": "It's small.",
+        "lion 🦁": "It's big.",
+        "tiger 🐅": "It's big.",
+        "elephant 🐘": "It's big.",
+        "zebra 🦓": "It's cute.",
+        "giraffe 🦒": "It's tall."
+    }
     
-    animals = ["bird 🐤", "lion 🦁", "tiger 🐅", "elephant 🐘", "zebra 🦓", "giraffe 🦒"]
-    
-    korean_questions = [
-        "동물의 모습은 어떠한가요?",
-        "무슨 동물에 대해 이야기하고 있나요?"
-    ]
+    korean_question = "동물의 모습은 어떠한가요?"
+    korean_options = ["작다", "크다", "귀엽다", "키가 크다"]
     
     selected_question = random.choice(questions)
-    selected_animal = random.choice(animals)
-    selected_answer = random.choice(answers)
-    selected_korean_question = random.choice(korean_questions)
+    selected_animal, selected_answer = random.choice(list(animals.items()))
+    
+    formatted_question = selected_question.format(animal=selected_animal.split()[0])
     
     # 남성과 여성 캐릭터 분리
     male_characters = [name for name, gender in characters.items() if gender == "male"]
@@ -48,8 +47,6 @@ def generate_question():
     else:
         speaker_a = random.choice(female_characters)
         speaker_b = random.choice(male_characters)
-    
-    formatted_question = selected_question.format(animal=selected_animal)
     
     key_expression = f"""
 A: {speaker_a}: {formatted_question}
@@ -67,12 +64,12 @@ B: {speaker_b}: {selected_answer}
     B: {speaker_b}: {selected_answer}
 
     [한국어 질문]
-    조건: {selected_korean_question.format(name=speaker_b)}을 만들어야 합니다.
-    질문: (한국어로 된 질문)
-    A. (한국어로 된 선택지)
-    B. (한국어로 된 선택지)
-    C. (한국어로 된 선택지)
-    D. (한국어로 된 선택지)
+    조건: {korean_question}을 만들어야 합니다.
+    질문: {korean_question}
+    A. {korean_options[0]}
+    B. {korean_options[1]}
+    C. {korean_options[2]}
+    D. {korean_options[3]}
     정답: (정답 선택지)
     """
 
