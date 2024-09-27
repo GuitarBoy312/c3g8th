@@ -88,7 +88,7 @@ def generate_dialogue_audio(dialogue):
     
     for speaker, lines in speakers.items():
         text = " ".join(lines)
-        voice = "alloy" if speaker == "A" else "echo"  # A는 여성 목소리, B는 남성 목소리
+        voice = "nova" if speaker == "A" else "echo"  # A는 여성 목소리, B는 남성 목소리
         audio_tag = text_to_speech(text, voice)
         audio_tags.append(audio_tag)
     
