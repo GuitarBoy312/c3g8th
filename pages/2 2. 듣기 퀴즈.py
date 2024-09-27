@@ -51,7 +51,7 @@ B: {selected_conversation[1]}
     """
 
     response = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
 
@@ -108,7 +108,7 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
     """
 
     response = client.chat.completions.create(
-        model="gpt-4-0125-preview",
+        model="gpt-4o-mini",
         messages=[{"role": "user", "content": prompt}]
     )
 
