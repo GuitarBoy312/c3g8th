@@ -46,14 +46,13 @@ B: {selected_conversation[1]}
     A: {selected_conversation[0]}
     B: {selected_conversation[1]}
 
-    [한국어 질문]
-   {selected_question}을 한국어로 표현 
+   {selected_question}을 한국어로 질문
 
-    [선택지]
     A. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
     B. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
     C. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
     D. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
+    
     정답: (정답 선택지)
     """
 
