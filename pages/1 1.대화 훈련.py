@@ -118,12 +118,12 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 �
     st.divider()
     st.write("다음 보기와 같이 잉글링에게 제안과 대답을 해 보세요.")
     st.markdown('''
-    ❶ M: Look at the bird. - G: It’s small.<br>
-❷ M: Look at the lion. - G: It’s big.<br>
-❸ M: Look at the tiger. - G: It’s small.<br>
-❹ M: Look at the elephant. - G: It’s big.<br>
-❺ M: Look at the zebra. - G: It’s cute.<br>
-❻ M: Look at the giraffe. - G: It’s tall.<br>
+🔸 A: Look at the bird.🐤------B: It’s small.
+🔸 A: Look at the lion.🦁------B: It’s big.
+🔸 A: Look at the tiger.🐅-----B: It’s small.
+🔸 A: Look at the elephant.🐘--B: It’s big.
+🔸 A: Look at the zebra.🦓-----B: It’s cute.
+🔸 A: Look at the giraffe.🦒---B: It’s tall.
     ''', unsafe_allow_html=True)
 
     
