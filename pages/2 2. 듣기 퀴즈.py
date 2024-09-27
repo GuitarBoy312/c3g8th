@@ -47,8 +47,9 @@ B: {selected_conversation[1]}
     B: {selected_conversation[1]}
 
     [한국어 질문]
-    조건: {selected_question}을 만들어야 합니다.
-    질문: (한국어로 된 질문) 
+   {selected_question}을 한국어로 표현 
+
+    [선택지]
     A. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
     B. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
     C. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
