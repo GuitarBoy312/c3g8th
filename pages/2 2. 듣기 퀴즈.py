@@ -7,52 +7,72 @@ import re
 # OpenAI 클라이언트 초기화
 client = OpenAI(api_key=st.secrets["openai_api_key"])
 
+# 캐릭터와 성별 정의
+characters = {
+    "Paul": "male", "Jello": "male", "Uju": "male", "Khan": "male", "Eric": "male",
+    "Bora": "female", "Tina": "female", "Amy": "female"
+}
+
 def generate_question():
-    conversations = [
-        ("Look at the bird.🐤", "It’s small."),
-        ("Look at the lion.🦁", "It’s big."),
-        ("Look at the tiger.🐅", "It’s small."),
-        ("Look at the elephant.🐘", "It’s big."),
-        ("Look at the zebra.🦓", "It’s cute."),
-        ("Look at the giraffe.🦒", "It’s tall.")
-    ]
-    answers = [
-        ("It’s small."),
-        ("It’s big."),
-        ("It’s small."),
-        ("It’s big."),
-        ("It’s cute."),
-        ("It’s tall.")
-    ]
     questions = [
-        "이 동물의 모습은 어떤가요?"
+        "Look at the {animal}.
     ]
     
-    selected_conversation = random.choice(conversations)
+    answers = [
+        "It's small. 🐤",
+        "It's big. 🦁",
+        "It's cute. 🦓",
+        "It's tall. 🦒"
+    ]
+    
+    animals = ["bird 🐤", "lion 🦁", "tiger 🐅", "elephant 🐘", "zebra 🦓", "giraffe 🦒"]
+    
+    korean_questions = [
+        "동물의 모습은 어떠한가요?",
+        "무슨 동물에 대해 이야기하고 있나요?"
+    ]
+    
     selected_question = random.choice(questions)
+    selected_animal = random.choice(animals)
+    selected_answer = random.choice(answers)
+    selected_korean_question = random.choice(korean_questions)
+    
+    # 남성과 여성 캐릭터 분리
+    male_characters = [name for name, gender in characters.items() if gender == "male"]
+    female_characters = [name for name, gender in characters.items() if gender == "female"]
+    
+    # 무작위로 첫 번째 화자의 성별을 선택하고, 두 번째 화자는 반대 성별에서 선택
+    if random.choice([True, False]):
+        speaker_a = random.choice(male_characters)
+        speaker_b = random.choice(female_characters)
+    else:
+        speaker_a = random.choice(female_characters)
+        speaker_b = random.choice(male_characters)
+    
+    formatted_question = selected_question.format(animal=selected_animal)
     
     key_expression = f"""
-A: {selected_conversation[0]}
-B: {selected_conversation[1]}
+A: {speaker_a}: {formatted_question}
+B: {speaker_b}: {selected_answer}
 """
     prompt = f"""{key_expression}을 생성해주세요. 
-    그 후 {conversations}에 맞게 정답과 오답을 보기로 하는 객관식 질문을 한국어로 만들어주세요.  
+    그 후 대화 내용에 관한 객관식 질문을 한국어로 만들어주세요.  
     조건: 문제의 정답은 1개입니다.  
     영어 대화는 A와 B가 각각 1번씩 말하고 끝납니다.
     A는 다음과 같이 한문장을 말하세요.
     B는 다음과 같이 한문장을 말하세요.
     형식:
     [영어 대화]
-    A: {selected_conversation[0]}
-    B: {selected_conversation[1]}
+    A: {speaker_a}: {formatted_question}
+    B: {speaker_b}: {selected_answer}
 
-   {selected_question}을 한국어로 질문
-
-    A. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
-    B. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
-    C. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
-    D. ({answers}를 한국어로 바꾼 선택지, 중복 불가)
-    
+    [한국어 질문]
+    조건: {selected_korean_question.format(name=speaker_b)}을 만들어야 합니다.
+    질문: (한국어로 된 질문)
+    A. (한국어로 된 선택지)
+    B. (한국어로 된 선택지)
+    C. (한국어로 된 선택지)
+    D. (한국어로 된 선택지)
     정답: (정답 선택지)
     """
 
@@ -75,7 +95,8 @@ def split_dialogue(text):
             speakers[speaker].append(content)
     return speakers
 
-def text_to_speech(text, voice):
+def text_to_speech(text, speaker):
+    voice = "alloy" if characters[speaker] == "female" else "echo"
     response = client.audio.speech.create(
         model="tts-1",
         voice=voice,
@@ -94,8 +115,8 @@ def generate_dialogue_audio(dialogue):
     
     for speaker, lines in speakers.items():
         text = " ".join(lines)
-        voice = "nova" if speaker == "A" else "echo"  # A는 여성 목소리, B는 남성 목소리
-        audio_tag = text_to_speech(text, voice)
+        speaker_name = re.search(r'([A-Za-z]+):', lines[0]).group(1)  # 대화에서 화자 이름 추출
+        audio_tag = text_to_speech(text, speaker_name)
         audio_tags.append(audio_tag)
     
     return "".join(audio_tags)
@@ -108,7 +129,7 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
     정답: {correct_answer}
     학생의 답변: {user_answer}
     
-    이 학생에게 왜 그들의 답변이 틀렸는지, 그리고 정답이 무엇인지 설명해주세요. 
+    이 학생에게  그들의 답변이 틀렸는지, 그리고 정답이 무엇인지 설명해주세요. 
     설명은 친절하고 격려하는 톤으로 작성해주세요. 
     대화의 내용을 참조하여 구체적으로 설명해주세요.
     """
@@ -124,7 +145,7 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
 
 # 메인 화면 구성
 st.header("✨인공지능 영어듣기 퀴즈 선생님 퀴즐링🕵️‍♀️")
-st.subheader("🦝동물의 생김새와 크기 영어듣기 퀴즈🦩")
+st.subheader("지금 하고 있는 일에 대한 영어듣기 퀴즈🕺")
 st.divider()
 
 #확장 설명
@@ -138,7 +159,7 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 �
     4️⃣ 정답과 대화 스크립트 확인하기.<br>
     <br>
     🙏 퀴즐링은 완벽하지 않을 수 있어요.<br> 
-    🙏 그럴 때에는 [새 문제 만들기] 버튼을 눌러주세요.
+    🙏 그럴 때에는 [새 제 만들기] 버튼을 눌러주세요.
     """
     ,  unsafe_allow_html=True)
 
