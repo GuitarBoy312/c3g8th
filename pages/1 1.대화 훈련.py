@@ -123,7 +123,8 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 �
 🔸 A: Look at the tiger.🐅--------B: It’s small.<br>
 🔸 A: Look at the elephant.🐘--B: It’s big.<br>
 🔸 A: Look at the zebra.🦓-------B: It’s cute.<br>
-🔸 A: Look at the giraffe.🦒------B: It’s tall.
+🔸 A: Look at the giraffe.🦒------B: It’s tall.<br>
+❓ 어렵다면 잉글링의 답변을 따라하는 것도 좋은 방법이예요.
     ''', unsafe_allow_html=True)
 
     
