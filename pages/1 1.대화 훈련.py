@@ -119,11 +119,11 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 �
     st.write("다음 보기와 같이 잉글링에게 제안과 대답을 해 보세요.")
     st.markdown('''
 🔸 A: Look at the bird.🐤--------B: It’s small.<br>
-🔸 A: Look at the lion.🦁--------B: It’s big.<br>
+🔸 A: Look at the lion.🦁---------B: It’s big.<br>
 🔸 A: Look at the tiger.🐅--------B: It’s small.<br>
 🔸 A: Look at the elephant.🐘--B: It’s big.<br>
 🔸 A: Look at the zebra.🦓-------B: It’s cute.<br>
-🔸 A: Look at the giraffe.🦒------B: It’s tall.
+🔸 A: Look at the giraffe.🦒-------B: It’s tall.
     ''', unsafe_allow_html=True)
 
     
