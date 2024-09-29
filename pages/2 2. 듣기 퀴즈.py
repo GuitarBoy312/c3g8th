@@ -92,7 +92,7 @@ def split_dialogue(text):
     return speakers
 
 def text_to_speech(text, speaker):
-    voice = "alloy" if characters[speaker] == "female" else "echo"
+    voice = "nova" if characters[speaker] == "female" else "echo"
     response = client.audio.speech.create(
         model="tts-1",
         voice=voice,
