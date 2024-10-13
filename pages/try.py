@@ -2,6 +2,10 @@ import streamlit as st
 import random
 import base64
 import re
+from openai import OpenAI
+
+# OpenAI 클라이언트 초기화
+client = OpenAI(api_key=st.secrets["openai_api_key"])
 
 # 캐릭터와 성별 정의
 characters = {
