@@ -15,7 +15,7 @@ characters = {
 
 def generate_question():
     questions = [
-        "Look at the {animal}.",
+        "Look at the {animal}."
     ]
     
     animals = {
@@ -214,8 +214,10 @@ if 'question_generated' in st.session_state and st.session_state.question_genera
             if selected_option:
                 st.info(f"선택한 답: {selected_option}")
                 # 정답에서 알파벳 옵션 제거 및 공백 제거
-                correct_answer_text = st.session_state.correct_answer.split('.')[-1].strip()
+                correct_answer_text = st.session_state.correct_answer.strip()
                 selected_option_text = selected_option.split('.')[-1].strip()
+                
+                st.write(f"Debug - 정답: '{correct_answer_text}', 선택: '{selected_option_text}'")
                 
                 if selected_option_text.lower() == correct_answer_text.lower():  
                     st.success("정답입니다!")
