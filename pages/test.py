@@ -16,8 +16,6 @@ characters = {
 def generate_question():
     questions = [
         "Look at the {animal}.",
-        "What do you see?",
-        "Can you describe the {animal}?"
     ]
     
     animals = {
@@ -220,7 +218,7 @@ if 'question_generated' in st.session_state and st.session_state.question_genera
                 correct_answer_text = st.session_state.correct_answer.strip()
                 selected_option_text = selected_option.split('.')[-1].strip()
                 
-                st.write(f"Debug - 정답: '{correct_answer_text}', 선택: '{selected_option_text}'")
+                st.write(f"정답: '{correct_answer_text}', 선택: '{selected_option_text}'")
                 
                 if selected_option_text.lower() == correct_answer_text.lower():  
                     st.success("정답입니다!")
