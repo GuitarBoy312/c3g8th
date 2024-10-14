@@ -54,7 +54,16 @@ A: {speaker_a}: {formatted_question}
 B: {speaker_b}: {selected_answer}
 """
     
-    correct_answer = next(option for option in korean_options if option in selected_answer)
+    correct_answer = None
+    for option in korean_options:
+        if option in selected_answer:
+            correct_answer = option
+            break
+    
+    if correct_answer is None:
+        # 일치하는 옵션이 없을 경우 기본값 설정
+        correct_answer = korean_options[1]  # "크다"를 기본값으로 설정
+
     question_content = f"""[한국어 질문]
 질문: {korean_question}
 A. {korean_options[0]}
