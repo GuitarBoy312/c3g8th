@@ -219,7 +219,11 @@ if 'question_generated' in st.session_state and st.session_state.question_genera
         if submit_button:
             if selected_option:
                 st.info(f"선택한 답: {selected_option}")
-                if selected_option.strip() == st.session_state.correct_answer.strip():  
+                # 정답에서 알파벳 옵션 제거 및 공백 제거
+                correct_answer_text = st.session_state.correct_answer.split('.')[-1].strip()
+                selected_option_text = selected_option.split('.')[-1].strip()
+                
+                if selected_option_text.lower() == correct_answer_text.lower():  
                     st.success("정답입니다!")
                     st.text(st.session_state.dialogue)
                 else:
