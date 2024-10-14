@@ -16,6 +16,8 @@ characters = {
 def generate_question():
     questions = [
         "Look at the {animal}.",
+        "What do you see?",
+        "Can you describe the {animal}?"
     ]
     
     animals = {
@@ -47,37 +49,22 @@ def generate_question():
         speaker_a = random.choice(female_characters)
         speaker_b = random.choice(male_characters)
     
-    key_expression = f"""
+    dialogue = f"""[영어 대화]
 A: {speaker_a}: {formatted_question}
 B: {speaker_b}: {selected_answer}
 """
-    prompt = f"""{key_expression}을 생성해주세요. 
-    그 후 대화 내용에 관한 객관식 질문을 한국어로 만들어주세요.  
-    조건: 문제의 정답은 1개입니다.  
-    영어 대화는 A와 B가 각각 1번씩 말하고 끝납니다.
-    A는 다음과 같이 한문장을 말하세요.
-    B는 다음과 같이 한문장을 말하세요.
-    형식:
-    [영어 대화]
-    A: {speaker_a}: {formatted_question}
-    B: {speaker_b}: {selected_answer}
-
-    [한국어 질문]
-    조건: {korean_question}을 만들어야 합니다.
-    질문: {korean_question}
-    A. {korean_options[0]}
-    B. {korean_options[1]}
-    C. {korean_options[2]}
-    D. {korean_options[3]}
-    정답: (정답 선택지)
-    """
-
-    response = client.chat.completions.create(
-        model="gpt-4o-mini",
-        messages=[{"role": "user", "content": prompt}]
-    )
-
-    return response.choices[0].message.content
+    
+    correct_answer = next(option for option in korean_options if option in selected_answer)
+    question_content = f"""[한국어 질문]
+질문: {korean_question}
+A. {korean_options[0]}
+B. {korean_options[1]}
+C. {korean_options[2]}
+D. {korean_options[3]}
+정답: {correct_answer}
+"""
+    
+    return dialogue + "\n" + question_content
 
 def parse_api_response(response_content):
     dialogue_part = re.search(r'\[영어 대화\](.*?)\[한국어 질문\]', response_content, re.DOTALL)
