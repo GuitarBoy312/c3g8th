@@ -15,7 +15,9 @@ characters = {
 
 def generate_question():
     questions = [
-        "Look at the {animal}."
+        "Look at the {animal}.",
+        "What do you see?",
+        "Can you describe the {animal}?"
     ]
     
     animals = {
@@ -53,14 +55,15 @@ B: {speaker_b}: {selected_answer}
 """
     
     correct_answer = None
-    for option in korean_options:
-        if option in selected_answer:
+    for option, description in zip(korean_options, ["small", "big", "cute", "tall"]):
+        if description in selected_answer.lower():
             correct_answer = option
             break
     
     if correct_answer is None:
-        # 일치하는 옵션이 없을 경우 기본값 설정
-        correct_answer = korean_options[1]  # "크다"를 기본값으로 설정
+        # 일치하는 옵션이 없을 경우 오류 처리
+        st.error("정답을 생성하는 데 문제가 발생했습니다. 다시 시도해주세요.")
+        st.stop()
 
     question_content = f"""[한국어 질문]
 질문: {korean_question}
