@@ -270,7 +270,6 @@ if st.button("새 문제 만들기"):
         
         st.session_state.audio_tags = generate_dialogue_audio(st.session_state.dialogue)
         
-        st.session_state.listening_quiz_total_questions += 1
         update_sidebar()
         st.rerun()
     except Exception as e:
