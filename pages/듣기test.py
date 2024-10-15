@@ -96,8 +96,8 @@ def generate_question():
 
 
     [한국어 질문]
-    조건: {korean_question}을 만들어야 합니다.
-    (한국어로 된 질문) 이 때, 선택지는 한국어로 제공됩니다.
+    조건: {korean_question}을 만들어야 합니다.  
+    이 때, 선택지는 한국어로 제공됩니다.
     A. {korean_options[0]}
     B. {korean_options[1]}
     C. {korean_options[2]}
@@ -212,6 +212,8 @@ if st.session_state.listening_quiz_current_question is not None:
                 st.info(f"선택한 답: {selected_option}")
                 correct_answer = st.session_state.correct_answer
                 user_answer = selected_option
+                
+                st.session_state.listening_quiz_total_questions += 1  # 총 문제 수 증가
                 
                 if user_answer == correct_answer:
                     st.success("정답입니다!")
