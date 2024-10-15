@@ -1,3 +1,18 @@
+import streamlit as st
+from openai import OpenAI
+import random
+import base64
+import re
+
+# OpenAI 클라이언트 초기화
+client = OpenAI(api_key=st.secrets["openai_api_key"])
+
+# 캐릭터와 성별 정의
+characters = {
+    "Paul": "male", "Jello": "male", "Uju": "male", "Khan": "male", "Eric": "male",
+    "Bora": "female", "Tina": "female", "Amy": "female"
+}
+
 # 세션 상태 초기화
 if 'listening_quiz_total_questions' not in st.session_state:
     st.session_state.listening_quiz_total_questions = 0
