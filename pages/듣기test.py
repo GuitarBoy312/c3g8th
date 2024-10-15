@@ -13,23 +13,6 @@ characters = {
     "Bora": "female", "Tina": "female", "Amy": "female"
 }
 
-# 세션 상태 초기화
-if 'listening_quiz_total_questions' not in st.session_state:
-    st.session_state.listening_quiz_total_questions = 0
-if 'listening_quiz_correct_answers' not in st.session_state:
-    st.session_state.listening_quiz_correct_answers = 0
-if 'listening_quiz_current_question' not in st.session_state:
-    st.session_state.listening_quiz_current_question = None
-
-# 사이드바에 통계 표시 함수
-def update_sidebar():
-    st.sidebar.markdown("## 듣기 퀴즈 통계")
-    st.sidebar.markdown(f"총 문제 수: {st.session_state.listening_quiz_total_questions}")
-    st.sidebar.markdown(f"맞춘 문제 수: {st.session_state.listening_quiz_correct_answers}")
-    if st.session_state.listening_quiz_total_questions > 0:
-        accuracy = (st.session_state.listening_quiz_correct_answers / st.session_state.listening_quiz_total_questions) * 100
-        st.sidebar.markdown(f"정확도: {accuracy:.2f}%")
-
 def generate_question():
     questions = [
         "Look at the {animal}."
@@ -166,12 +149,18 @@ def generate_explanation(question, correct_answer, user_answer, dialogue):
 
     return response.choices[0].message.content
 
-# 메인 화면 구성
-st.header("✨인공지능 영어듣기 퀴즈 선생님 퀴즐링🕵️‍♀️")
-st.subheader("🦝동물의 생김새와 크기에 대한 영어듣기 퀴즈🦩")
-st.divider()
+# Streamlit UI
+st.title("✨인공지능 영어듣기 퀴즈 선생님 퀴즐링🕵️‍♀️")
+st.header("🦝동물의 생김새와 크기에 대한 영어듣기 퀴즈🦩")
 
-# 확장 설명
+# 세션 상태 초기화
+if 'current_question' not in st.session_state:
+    st.session_state.current_question = None
+    st.session_state.question_number = 0
+    st.session_state.correct_count = 0
+    st.session_state.total_questions = 0
+
+# 사용 설명
 with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 👆✅", expanded=False):
     st.markdown(
     """     
@@ -182,62 +171,71 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요 �
     4️⃣ 정답과 대화 스크립트 확인하기.<br>
     <br>
     🙏 퀴즐링은 완벽하지 않을 수 있어요.<br> 
-    🙏 그럴 때에는 [새 문제 만들기] 버튼을 눌러주세요.
+    🙏 그럴 때에는 [새 제 만들기] 버튼을 눌러주세요.
     """
-    ,  unsafe_allow_html=True)
+    , unsafe_allow_html=True)
 
-# 앱 시작 시 또는 새로고침 시 문제 생성
-if st.session_state.listening_quiz_current_question is None:
-    st.session_state.listening_quiz_current_question = generate_question()
+# 새 문제 생성
+if st.button("새 문제 만들기"):
+    full_content = generate_question()
+    dialogue, question_part = full_content.split("[한국어 질문]")
+    
+    question_lines = question_part.strip().split("\n")
+    question = question_lines[0].replace("질문:", "").strip() if question_lines else ""
+    options = question_lines[1:5] if len(question_lines) > 1 else []
+    correct_answer = ""
+    
+    for line in question_lines:
+        if line.startswith("정답:"):
+            correct_answer = line.replace("정답:", "").strip()
+            break
+    
+    st.session_state.current_question = {
+        "question": question,
+        "dialogue": dialogue.strip(),
+        "options": options,
+        "correct_answer": correct_answer,
+        "audio_tags": generate_dialogue_audio(dialogue.strip())
+    }
+    st.session_state.question_number += 1
+    st.session_state.total_questions += 1
 
-# 현재 문제 표시
-if st.session_state.listening_quiz_current_question:
-    st.markdown("### 질문")
-    st.write(st.session_state.question)
+# 문제 표시
+if st.session_state.current_question:
+    st.subheader(f"문제 {st.session_state.question_number}")
+    st.write(st.session_state.current_question["question"])
     
     st.markdown("### 대화 듣기")
     st.write("왼쪽부터 순서대로 들어보세요. 너무 빠르면 눈사람 버튼을 눌러 속도를 조절해보세요.")
-    st.markdown(st.session_state.audio_tags, unsafe_allow_html=True)
+    st.markdown(st.session_state.current_question["audio_tags"], unsafe_allow_html=True)
     
     with st.form(key='answer_form'):
-        selected_option = st.radio("정답을 선택하세요:", st.session_state.options, index=None)
+        selected_option = st.radio("정답을 선택하세요:", st.session_state.current_question["options"], index=None)
         submit_button = st.form_submit_button(label='정답 확인')
         
         if submit_button:
             if selected_option:
-                st.info(f"선택한 답: {selected_option}")
-                correct_answer_text = st.session_state.correct_answer.strip()
+                correct_answer_text = st.session_state.current_question["correct_answer"].strip()
                 selected_option_text = selected_option.split('.')[-1].strip()
                 
-                st.session_state.listening_quiz_total_questions += 1
                 if selected_option_text.lower() == correct_answer_text.lower():
                     st.success("정답입니다!")
-                    st.session_state.listening_quiz_correct_answers += 1
+                    st.session_state.correct_count += 1
                 else:
-                    st.error(f"틀렸습니다. 정답은 {st.session_state.correct_answer}입니다.")
-                
-                st.text(st.session_state.dialogue)
-                
-                if selected_option_text.lower() != correct_answer_text.lower():
+                    st.error(f"틀렸습니다. 정답은 {correct_answer_text}입니다.")
                     explanation = generate_explanation(
-                        st.session_state.question,
-                        st.session_state.correct_answer,
+                        st.session_state.current_question["question"],
+                        correct_answer_text,
                         selected_option,
-                        st.session_state.dialogue
+                        st.session_state.current_question["dialogue"]
                     )
                     st.markdown("### 오답 설명")
                     st.write(explanation)
                 
-                update_sidebar()
-                st.session_state.listening_quiz_current_question = None
+                st.text(st.session_state.current_question["dialogue"])
+                st.session_state.current_question = None
             else:
                 st.warning("답을 선택해주세요.")
 
-# 사이드바 업데이트
-update_sidebar()
-
-# 새 문제 만들기 버튼 (맨 아래로 이동)
-st.markdown("---")
-if st.button("새 문제 만들기"):
-    st.session_state.listening_quiz_current_question = None
-    st.rerun()
+# 점수 표시
+st.sidebar.markdown(f"### 점수: {st.session_state.correct_count}/{st.session_state.total_questions}")
