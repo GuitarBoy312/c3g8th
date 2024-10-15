@@ -119,7 +119,7 @@ if st.button("새 문제 만들기"):
     st.rerun()
 
 # 사이드바에 정답 카운트 표시
-st.sidebar.header("단어퀴즈 진행상황")
+st.sidebar.header("단어퀴즈 점수")
 st.sidebar.write(f"총 문제 수: {st.session_state.vocabulary_quiz_state['total_count']}")
 st.sidebar.write(f"맞춘 문제 수: {st.session_state.vocabulary_quiz_state['correct_count']}")
 if st.session_state.vocabulary_quiz_state['total_count'] > 0:
