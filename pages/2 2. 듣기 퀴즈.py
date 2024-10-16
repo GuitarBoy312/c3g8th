@@ -90,6 +90,11 @@ def generate_question():
         random.shuffle(animal_options)
         options = [animal.split()[0] for animal in animal_options]  # 이모지 제거
         correct_answer = animal_name
+        
+        # 동물 이름을 한국어로 변환
+        korean_animals = {"bird": "새", "lion": "사자", "tiger": "호랑이", "elephant": "코끼리", "zebra": "얼룩말", "giraffe": "기린"}
+        options = [korean_animals.get(animal, animal) for animal in options]
+        correct_answer = korean_animals.get(correct_answer, correct_answer)
     
     return {
         "question": question,
