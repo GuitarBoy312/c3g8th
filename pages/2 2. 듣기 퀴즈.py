@@ -179,7 +179,7 @@ if st.session_state.listening_quiz_current_question is not None:
                 correct_answer = st.session_state.correct_answer
                 user_answer = selected_option
                 
-                st.session_state.listening_quiz_total_questions += 1
+                #st.session_state.listening_quiz_total_questions += 1
                 if user_answer == correct_answer:
                     st.success("정답입니다!")
                     st.session_state.listening_quiz_correct_answers += 1
@@ -207,6 +207,8 @@ if st.button("새 문제 만들기"):
         
         audio_contents = generate_dialogue_audio(qa_set["dialogue"], qa_set["speaker_a"], qa_set["speaker_b"])
         st.session_state.audio_tags = create_audio_players(audio_contents)
+
+        st.session_state.listening_quiz_total_questions += 1
         
         update_sidebar()
         st.rerun()
