@@ -28,6 +28,8 @@ if 'audio_tags' not in st.session_state:
     st.session_state.audio_tags = ""
 if 'previous_characteristic' not in st.session_state:
     st.session_state.previous_characteristic = None
+if 'previous_question_type' not in st.session_state:
+    st.session_state.previous_question_type = None
 
 # 사이드바 컨테이너 생성
 if 'listening_quiz_sidebar_placeholder' not in st.session_state:
@@ -58,19 +60,36 @@ def generate_question():
         speaker_a, speaker_b = speaker_b, speaker_a
     
     selected_animal = random.choice(animals)
+    animal_name = selected_animal.split()[0]  # 이모지 제거
     
-    # 이전 특성을 제외한 특성 목록 생성
     available_characteristics = [c for c in characteristics if c != st.session_state.previous_characteristic]
     correct_characteristic = random.choice(available_characteristics)
-    
-    # 선택된 특성을 이전 특성으로 저장
     st.session_state.previous_characteristic = correct_characteristic
     
-    options = ["작다", "크다", "귀엽다", "키가 크다"]
-    correct_answer = options[characteristics.index(correct_characteristic)]
+    dialogue = f"{speaker_a}: Look at the {animal_name}.\n{speaker_b}: It's {correct_characteristic}."
     
-    dialogue = f"{speaker_a}: Look at the {selected_animal}.\n{speaker_b}: It's {correct_characteristic}."
-    question = f"동물의 모습은 어떠한가요?"
+    # 질문 타입 결정 (이전 질문과 다른 타입 선택)
+    if st.session_state.previous_question_type == "appearance":
+        question_type = "animal"
+    elif st.session_state.previous_question_type == "animal":
+        question_type = "appearance"
+    else:
+        question_type = random.choice(["appearance", "animal"])
+    
+    st.session_state.previous_question_type = question_type
+    
+    if question_type == "appearance":
+        question = "동물의 모습은 어떠한가요?"
+        options = ["작다", "크다", "귀엽다", "키가 크다"]
+        correct_answer = options[characteristics.index(correct_characteristic)]
+    else:
+        question = "어떤 동물에 대해 이야기하고 있나요?"
+        animal_options = random.sample(animals, 4)
+        if selected_animal not in animal_options:
+            animal_options[0] = selected_animal
+        random.shuffle(animal_options)
+        options = [animal.split()[0] for animal in animal_options]  # 이모지 제거
+        correct_answer = animal_name
     
     return {
         "question": question,
