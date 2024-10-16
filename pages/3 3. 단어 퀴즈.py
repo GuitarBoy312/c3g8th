@@ -101,7 +101,7 @@ if st.session_state.vocabulary_quiz_state['question_generated']:
             if selected_option:
                 st.info(f"선택한 답: {selected_option}")
                 st.session_state.vocabulary_quiz_state['answered'] = True
-                st.session_state.vocabulary_quiz_state['total_count'] += 1  # 총 문제 수 증가
+                #st.session_state.vocabulary_quiz_state['total_count'] += 1  # 총 문제 수 증가
                 if selected_option.strip() == st.session_state.vocabulary_quiz_state['current_answer'].strip():  
                     st.success("정답입니다!")
                     st.session_state.vocabulary_quiz_state['correct_count'] += 1
@@ -123,7 +123,7 @@ if st.button("새 문제 만들기"):
     st.session_state.vocabulary_quiz_state['current_answer'] = correct_answer
     st.session_state.vocabulary_quiz_state['question_generated'] = True
     st.session_state.vocabulary_quiz_state['answered'] = False  # 답변 상태 초기화
-    # st.session_state.vocabulary_quiz_state['total_count'] += 1  # 이 줄 제거
+    st.session_state.vocabulary_quiz_state['total_count'] += 1  # 이 줄 제거
     st.rerun()
 
 # 사이드바에 정답 카운트 표시
