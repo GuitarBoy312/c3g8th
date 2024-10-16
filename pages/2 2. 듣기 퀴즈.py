@@ -26,6 +26,8 @@ if 'listening_quiz_current_question' not in st.session_state:
     st.session_state.listening_quiz_current_question = None
 if 'audio_tags' not in st.session_state:
     st.session_state.audio_tags = ""
+if 'previous_characteristic' not in st.session_state:
+    st.session_state.previous_characteristic = None
 
 # 사이드바 컨테이너 생성
 if 'listening_quiz_sidebar_placeholder' not in st.session_state:
@@ -49,16 +51,20 @@ def generate_question():
     male_characters = [name for name, gender in characters.items() if gender == "male"]
     female_characters = [name for name, gender in characters.items() if gender == "female"]
     
-    # 랜덤으로 남성과 여성 캐릭터 선택
     speaker_a = random.choice(male_characters)
     speaker_b = random.choice(female_characters)
     
-    # 50% 확률로 순서를 바꿈
     if random.choice([True, False]):
         speaker_a, speaker_b = speaker_b, speaker_a
     
     selected_animal = random.choice(animals)
-    correct_characteristic = random.choice(characteristics)
+    
+    # 이전 특성을 제외한 특성 목록 생성
+    available_characteristics = [c for c in characteristics if c != st.session_state.previous_characteristic]
+    correct_characteristic = random.choice(available_characteristics)
+    
+    # 선택된 특성을 이전 특성으로 저장
+    st.session_state.previous_characteristic = correct_characteristic
     
     options = ["작다", "크다", "귀엽다", "키가 크다"]
     correct_answer = options[characteristics.index(correct_characteristic)]
