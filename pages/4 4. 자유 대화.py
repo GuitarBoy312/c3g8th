@@ -11,13 +11,13 @@ if 'openai_client' not in st.session_state:
 SYSTEM_MESSAGE = {
     "role": "system", 
     "content": '''
-   You are an elementary school English teacher and your name is Engling. I am an elementary school student. 
+   You are an EFL elementary school English teacher and your name is Engling. I am an EFL 3rd grade elementary school student. 
    Please practice speaking English with me. My English level is CEFR A1. When you speak English, please speak at a level that suits me.
    Only speak in English!! 
     '''
 }
 
-# 초기화 함수
+# 초기화 함수 수정
 def initialize_session():
     for key in list(st.session_state.keys()):
         del st.session_state[key]
@@ -26,9 +26,10 @@ def initialize_session():
     st.session_state['audio_data'] = []
     st.session_state['tts_data'] = []
     st.session_state['initialized'] = True
+    st.session_state['page'] = '자유 대화'  # 현재 페이지 표시
 
-# 세션 상태 초기화
-if 'initialized' not in st.session_state or not st.session_state['initialized']:
+# 세션 상태 초기화 로직 수정
+if 'initialized' not in st.session_state or not st.session_state['initialized'] or st.session_state.get('page') != '자유 대화':
     initialize_session()
 
 # ChatGPT API 호출
@@ -93,7 +94,7 @@ with st.expander("❗❗ 글상자를 펼쳐 사용방법을 읽어보세요. �
     1️⃣ [녹음 시작] 버튼을 눌러 잉글링에게 말하기.<br>
     2️⃣ [녹음 완료] 버튼을 누르고 내가 한 말과 잉글링의 대답 들어보기.<br> 
     3️⃣ [녹음 시작] 버튼을 다시 눌러 대답하고 이어서 바로 질문하기.<br>
-    4️⃣ 말을 하다 생각이 안나면 [잠깐 멈춤]을 누르고 생각한 후, 다시 [녹음 시작]을 누를 수 있음.<br>
+    4️⃣ 말을 하다 생각이 안나면 [잠깐 멈춤]을 누르고 생각한 후, 다시 [녹음 시작]을 누를 수 있음.
     5️⃣ 1~4번을 반복하기. 말문이 막힐 땐 [잠깐 멈춤] 버튼을 누르기.<br>
     <br>
     🙏 잉글링은 완벽하게 이해하거나 제대로 대답하지 않을 수 있어요.<br> 
